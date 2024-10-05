@@ -576,7 +576,7 @@ class BuildTool
                   first = false;
                   Log.lock();
                   Log.println("");
-                  Log.info("\x1b[33;1mCompiling group: " + group.mId + "\x1b[0m");
+                  Log.info("\x1b[33;1mCompiling group: " + group.mId + " (" + to_be_compiled.length + " file" + (to_be_compiled.length==1 ? "" : "s") + ")\x1b[0m");
                   var message = "\x1b[1m" + (nvcc ? getNvcc() : mCompiler.mExe) + "\x1b[0m";
                   var flags = group.mCompilerFlags;
                   if (!nvcc)
@@ -612,10 +612,15 @@ class BuildTool
          } : null;
 
          Profile.push("compile");
+
+         var compile_progress = null;
+         if (!Log.verbose)
+            compile_progress = new Progress(0,to_be_compiled.length);
+
          if (threadPool==null)
          {
             for(file in to_be_compiled)
-               mCompiler.compile(file,-1,groupHeader,pchStamp);
+               mCompiler.compile(file,-1,groupHeader,pchStamp,compile_progress);
          }
          else
          {
@@ -631,7 +636,7 @@ class BuildTool
                         break;
                      var file = to_be_compiled[index];
 
-                     compiler.compile(file,threadId,groupHeader,pchStamp);
+                     compiler.compile(file,threadId,groupHeader,pchStamp,compile_progress);
                   }
             });
          }
@@ -1539,8 +1544,11 @@ class BuildTool
       }
 
 
-      if (defines.exists("HXCPP_NO_COLOUR") || defines.exists("HXCPP_NO_COLOR"))
+      if (Sys.getEnv("HXCPP_COLOUR") != null || Sys.getEnv("HXCPP_COLOR") != null)
+         Log.colorSupported = !(defines.exists("HXCPP_NO_COLOUR") || defines.exists("HXCPP_NO_COLOR"));
+      else if (defines.exists("HXCPP_NO_COLOUR") || defines.exists("HXCPP_NO_COLOR"))
          Log.colorSupported = false;
+      
       Log.verbose = defines.exists("HXCPP_VERBOSE");
       exitOnThreadError = defines.exists("HXCPP_EXIT_ON_ERROR");
 
@@ -1847,6 +1855,8 @@ class BuildTool
       Log.println('    ${BOLD}resize${NORMAL} #megabytes -- Only keep #megabytes MB');
       Log.println('    ${BOLD}list${NORMAL} -- list cache usage');
       Log.println('    ${BOLD}details${NORMAL} -- list cache usage, per file');
+      Log.println(' ${BOLD}haxelib run hxcpp${NORMAL} ${ITALIC}${WHITE}setup${NORMAL}');
+      Log.println('   Rebuild the hxcpp build tool');
       Log.println('');
    }
 
@@ -2348,7 +2358,7 @@ class BuildTool
    {
       var ver = Std.parseInt(inVersion);
       if (ver>6)
-         Log.error("Your version of hxcpp.n is out-of-date.  Please update by compiling 'haxe compile.hxml' in hxcpp/tools/hxcpp.");
+         Log.error("Your version of hxcpp.n is out-of-date.  Please update by running 'haxelib run hxcpp setup'");
    }
 
    public function resolvePath(inPath:String)

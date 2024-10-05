@@ -672,6 +672,26 @@ hx::Object * val_call0(hx::Object * arg1) THROWS
    return arg1->__run().GetPtr();
 }
 
+hx::Object * val_call0_catchexcept(hx::Object * arg1, hx::Object * fcatch) THROWS
+{
+   try
+   {
+   if (!arg1) Dynamic::ThrowBadFunctionError();
+   return arg1->__run().GetPtr();
+   }
+   catch(Dynamic e)
+   {
+      if(fcatch && fcatch->__ArgCount() == 1)
+	fcatch->__run(e);
+   }
+   catch(...)
+   {
+      if(fcatch && fcatch->__ArgCount() == 1)
+	fcatch->__run(HX_CSTRING("Unknown error"));
+   }
+   return 0;
+}
+
 hx::Object * val_call0_traceexcept(hx::Object * arg1) THROWS
 {
    try
@@ -695,6 +715,25 @@ hx::Object * val_call1(hx::Object * arg1,hx::Object * arg2) THROWS
    return arg1->__run(arg2).GetPtr();
 }
 
+hx::Object * val_call1_catchexcept(hx::Object * arg1,hx::Object * arg2, hx::Object * fcatch) THROWS
+{
+   try
+   {
+   if (!arg1) Dynamic::ThrowBadFunctionError();
+   return arg1->__run(arg2).GetPtr();
+   }
+   catch(Dynamic e)
+   {
+      if(fcatch && fcatch->__ArgCount() == 1)
+	fcatch->__run(e);
+   }
+   catch(...)
+   {
+      if(fcatch && fcatch->__ArgCount() == 1)
+	fcatch->__run(HX_CSTRING("Unknown error"));
+   }
+   return 0;
+}
 
 hx::Object * val_call2(hx::Object * arg1,hx::Object * arg2,hx::Object * arg3) THROWS
 {
@@ -702,6 +741,25 @@ hx::Object * val_call2(hx::Object * arg1,hx::Object * arg2,hx::Object * arg3) TH
    return arg1->__run(arg2,arg3).GetPtr();
 }
 
+hx::Object * val_call2_catchexcept(hx::Object * arg1,hx::Object * arg2,hx::Object * arg3, hx::Object * fcatch) THROWS
+{
+   try
+   {
+   if (!arg1) Dynamic::ThrowBadFunctionError();
+   return arg1->__run(arg2,arg3).GetPtr();
+   }
+   catch(Dynamic e)
+   {
+      if(fcatch && fcatch->__ArgCount() == 1)
+	fcatch->__run(e);
+   }
+   catch(...)
+   {
+      if(fcatch && fcatch->__ArgCount() == 1)
+	fcatch->__run(HX_CSTRING("Unknown error"));
+   }
+   return 0;
+}
 
 hx::Object * val_call3(hx::Object * arg1,hx::Object * arg2,hx::Object * arg3,hx::Object * arg4) THROWS
 {
@@ -709,6 +767,25 @@ hx::Object * val_call3(hx::Object * arg1,hx::Object * arg2,hx::Object * arg3,hx:
    return arg1->__run(arg2,arg3,arg4).GetPtr();
 }
 
+hx::Object * val_call3_catchexcept(hx::Object * arg1,hx::Object * arg2,hx::Object * arg3,hx::Object * arg4, hx::Object * fcatch) THROWS
+{
+   try
+   {
+   if (!arg1) Dynamic::ThrowBadFunctionError();
+   return arg1->__run(arg2,arg3,arg4).GetPtr();
+   }
+   catch(Dynamic e)
+   {
+      if(fcatch && fcatch->__ArgCount() == 1)
+	fcatch->__run(e);
+   }
+   catch(...)
+   {
+      if(fcatch && fcatch->__ArgCount() == 1)
+	fcatch->__run(HX_CSTRING("Unknown error"));
+   }
+   return 0;
+}
 
 hx::Object * val_callN(hx::Object * arg1,hx::Object ** arg2, int nCount) THROWS
 {
@@ -719,6 +796,28 @@ hx::Object * val_callN(hx::Object * arg1,hx::Object ** arg2, int nCount) THROWS
    return arg1->__Run( args ).GetPtr();
 }
 
+hx::Object * val_callN_catchexcept(hx::Object * arg1,hx::Object ** arg2, int nCount, hx::Object * fcatch) THROWS
+{
+   try
+   {
+   if (!arg1) Dynamic::ThrowBadFunctionError();
+   Array<Dynamic> args = Array_obj<Dynamic>::__new(0, nCount);
+   while (nCount--)
+     args << *arg2++;
+   return arg1->__Run( args ).GetPtr();
+   }
+   catch(Dynamic e)
+   {
+      if(fcatch && fcatch->__ArgCount() == 1)
+	fcatch->__run(e);
+   }
+   catch(...)
+   {
+      if(fcatch && fcatch->__ArgCount() == 1)
+	fcatch->__run(HX_CSTRING("Unknown error"));
+   }
+   return 0;
+}
 
 // Call object field
 hx::Object * val_ocall0(hx::Object * arg1,int arg2) THROWS
@@ -727,6 +826,25 @@ hx::Object * val_ocall0(hx::Object * arg1,int arg2) THROWS
    return arg1->__IField(arg2)->__run().GetPtr();
 }
 
+hx::Object * val_ocall0_catchexcept(hx::Object * arg1,int arg2, hx::Object * fcatch) THROWS
+{
+   try
+   {
+   if (!arg1) hx::Throw(HX_INVALID_OBJECT);
+   return arg1->__IField(arg2)->__run().GetPtr();
+   }
+   catch(Dynamic e)
+   {
+      if(fcatch && fcatch->__ArgCount() == 1)
+	fcatch->__run(e);
+   }
+   catch(...)
+   {
+      if(fcatch && fcatch->__ArgCount() == 1)
+	fcatch->__run(HX_CSTRING("Unknown error"));
+   }
+   return 0;
+}
 
 hx::Object * val_ocall1(hx::Object * arg1,int arg2,hx::Object * arg3) THROWS
 {
@@ -734,6 +852,25 @@ hx::Object * val_ocall1(hx::Object * arg1,int arg2,hx::Object * arg3) THROWS
    return arg1->__IField(arg2)->__run(arg3).GetPtr();
 }
 
+hx::Object * val_ocall1_catchexcept(hx::Object * arg1,int arg2,hx::Object * arg3, hx::Object * fcatch) THROWS
+{
+   try
+   {
+   if (!arg1) hx::Throw(HX_INVALID_OBJECT);
+   return arg1->__IField(arg2)->__run(arg3).GetPtr();
+   }
+   catch(Dynamic e)
+   {
+      if(fcatch && fcatch->__ArgCount() == 1)
+	fcatch->__run(e);
+   }
+   catch(...)
+   {
+      if(fcatch && fcatch->__ArgCount() == 1)
+	fcatch->__run(HX_CSTRING("Unknown error"));
+   }
+   return 0;
+}
 
 hx::Object * val_ocall2(hx::Object * arg1,int arg2,hx::Object * arg3,hx::Object * arg4) THROWS
 {
@@ -741,6 +878,25 @@ hx::Object * val_ocall2(hx::Object * arg1,int arg2,hx::Object * arg3,hx::Object 
    return arg1->__IField(arg2)->__run(arg3,arg4).GetPtr();
 }
 
+hx::Object * val_ocall2_catchexcept(hx::Object * arg1,int arg2,hx::Object * arg3,hx::Object * arg4, hx::Object * fcatch) THROWS
+{
+   try
+   {
+   if (!arg1) hx::Throw(HX_INVALID_OBJECT);
+   return arg1->__IField(arg2)->__run(arg3,arg4).GetPtr();
+   }
+   catch(Dynamic e)
+   {
+      if(fcatch && fcatch->__ArgCount() == 1)
+	fcatch->__run(e);
+   }
+   catch(...)
+   {
+      if(fcatch && fcatch->__ArgCount() == 1)
+	fcatch->__run(HX_CSTRING("Unknown error"));
+   }
+   return 0;
+}
 
 hx::Object * val_ocall3(hx::Object * arg1,int arg2,hx::Object * arg3,hx::Object * arg4,hx::Object * arg5) THROWS
 {
@@ -748,6 +904,25 @@ hx::Object * val_ocall3(hx::Object * arg1,int arg2,hx::Object * arg3,hx::Object 
    return arg1->__IField(arg2)->__run(arg3,arg4,arg5).GetPtr();
 }
 
+hx::Object * val_ocall3_catchexcept(hx::Object * arg1,int arg2,hx::Object * arg3,hx::Object * arg4,hx::Object * arg5, hx::Object * fcatch) THROWS
+{
+   try
+   {
+   if (!arg1) hx::Throw(HX_INVALID_OBJECT);
+   return arg1->__IField(arg2)->__run(arg3,arg4,arg5).GetPtr();
+   }
+   catch(Dynamic e)
+   {
+      if(fcatch && fcatch->__ArgCount() == 1)
+	fcatch->__run(e);
+   }
+   catch(...)
+   {
+      if(fcatch && fcatch->__ArgCount() == 1)
+	fcatch->__run(HX_CSTRING("Unknown error"));
+   }
+   return 0;
+}
 
 hx::Object * val_ocallN(hx::Object * arg1,int arg2,hx::Object * arg3) THROWS
 {
@@ -755,7 +930,25 @@ hx::Object * val_ocallN(hx::Object * arg1,int arg2,hx::Object * arg3) THROWS
    return arg1->__IField(arg2)->__run(Dynamic(arg3)).GetPtr();
 }
 
-
+hx::Object * val_ocallN_catchexcept(hx::Object * arg1,int arg2,hx::Object * arg3, hx::Object * fcatch) THROWS
+{
+   try
+   {
+   if (!arg1) hx::Throw(HX_INVALID_OBJECT);
+   return arg1->__IField(arg2)->__run(Dynamic(arg3)).GetPtr();
+   }
+   catch(Dynamic e)
+   {
+      if(fcatch && fcatch->__ArgCount() == 1)
+	fcatch->__run(e);
+   }
+   catch(...)
+   {
+      if(fcatch && fcatch->__ArgCount() == 1)
+	fcatch->__run(HX_CSTRING("Unknown error"));
+   }
+   return 0;
+}
 
 // Objects access
 int val_id(const char * arg1)
